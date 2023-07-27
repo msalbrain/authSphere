@@ -1,0 +1,19 @@
+version: "2"
+sql:
+  - engine: "sqlite"
+    schema: "sqlite_schema.sql"
+    queries: "sqlite_query.sql"
+    gen:
+      go:
+        package: "database"
+        out: "database"
+
+  - engine: "postgresql"
+    schema: "postgres_schema.sql"
+    queries: "postgres_query.sql"
+    gen:
+      go:
+        package: "database"
+        out: "database"
+
+

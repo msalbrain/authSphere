@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fiberseed/api"
-	"fiberseed/api/books"
-	"fiberseed/database"
-	"fiberseed/server"
+	"authShpere/api"
+	"authShpere/api/books"
+	"authShpere/database"
+	"authShpere/server"
 	"log"
 
 	"github.com/joho/godotenv"

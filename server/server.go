@@ -1,8 +1,7 @@
 package server
 
 import (
-	"fiberseed/database"
-	"fiberseed/pkg"
+	"authShpere/database"
 	"fmt"
 	"os"
 
@@ -34,7 +33,7 @@ func setupMiddlewares(app *fiber.App) {
 
 func Create() *fiber.App {
 	database.SetupDatabase()
-	
+
 	app := fiber.New(fiber.Config{
 		// Override default error handler
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
