@@ -1,23 +1,23 @@
-# Authsphere 👋
+# Authsphere 🔐
 
 Authsphere is an open-source authentication and authorization service that provides a range of features similar to Auth0. It offers token authentication, email and password authentication, multi-factor authentication (MFA), JWT and refresh token management, role-based access control (RBAC), a dashboard for managing the authentication service, user and user session management, and provides SDKs and APIs for seamless integration.
 
 ## Features
 
-- Token Authentication: Authenticate users using tokens for secure access to protected resources.
-- Email and Password Authentication: Allow users to sign up, log in, and manage their accounts using email and password credentials.
-- Multi-Factor Authentication (MFA): Enhance security with additional verification layers such as SMS codes, email verification, or authenticator apps.
-- JWT and Refresh Token Management: Generate and manage JSON Web Tokens (JWTs) for secure communication, with refresh tokens to extend access without reauthentication.
-- Role-Based Access Control (RBAC): Assign roles and permissions to users for fine-grained access control.
-- Dashboard: A user-friendly dashboard interface for managing the authentication service, including configuration settings, user management, and user session tracking.
-- User and User Session Management: Provide functionality to manage user accounts and track user sessions.
-- SDKs and APIs: Simplify integration with SDKs and APIs for easy implementation in various applications.
-- Boilerplate: Provides a standardized code structure and project foundation for easier development with go fibre can be altered as you wish.
-- Devices Auth: Enables authentication and management of user devices to enhance security.
-- MFA: Integration with multi-factor authentication methods to add an extra layer of user verification.
+- Token Authentication: (PENDING)
+- Email and Password Authentication: (PENDING)
+- Multi-Factor Authentication (MFA): (PENDING)
+- JWT and Refresh Token Management: (PENDING)
+- Role-Based Access Control (RBAC): (PENDING)
+- Dashboard: (PENDING)
+- CLI: (PENDING) same function of the dashboard
+- User and User Session Management: (PENDING)
+- SDKs and APIs: (PENDING)
+- Boilerplate: (PENDING)
+- APP Auth: (PENDING)
 - Passwordless Signup (TBD): Optional feature that allows users to sign up without passwords, utilizing alternative methods like email verification or social sign-in.
-- Social Signup: Integration with popular social media platforms for seamless user sign-up and login.
-- Sending Out Notifications: Capability to send out notifications to users, such as account verification emails or password reset instructions.
+- Social Signup: (PENDING)
+- Sending Out Notifications: (PENDING)
 
 
 
