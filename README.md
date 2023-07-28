@@ -1,5 +1,8 @@
 # Authsphere 🔐
 
+![authspere](authsphere_logo.jpeg)
+
+
 Authsphere is an open-source authentication and authorization service that provides a range of features similar to Auth0. It offers token authentication, email and password authentication, multi-factor authentication (MFA), JWT and refresh token management, role-based access control (RBAC), a dashboard for managing the authentication service, user and user session management, and provides SDKs and APIs for seamless integration.
 
 ## Features

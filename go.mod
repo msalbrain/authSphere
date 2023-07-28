@@ -1,4 +1,4 @@
-module authShpere
+module github.com/msalbrain/authSphere
 
 go 1.20
 

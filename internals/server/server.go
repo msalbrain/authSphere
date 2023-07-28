@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -14,22 +15,32 @@ func setupMiddlewares(e *echo.Echo) {
 	e.Use(middleware.CORS())
 	e.Use(middleware.Gzip())
 	e.Use(middleware.Secure())
+
 	// implement limiter
 	if os.Getenv("ENABLE_LOGGER") != "" {
 		e.Use(middleware.Logger())
 	}
 }
 
+func apiRoutes(e *echo.Echo) {
+
+}
+
+func webRoutes(e *echo.Echo) {
+
+}
+
+
 func create() *echo.Echo {
 	// database.SetupDatabase()
 
 	e := echo.New()
 
-	setupMiddlewares(e)
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "OK")
-	})
+
+	setupMiddlewares(e)
+	apiRoutes(e)
+	webRoutes(e)
 
 	return e
 }
