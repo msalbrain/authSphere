@@ -1,13 +1,16 @@
-package main
+package server
 
 import (
 	"fmt"
 	"os"
-
 	"net/http"
+
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+
+	"github.com/msalbrain/authSphere/internals/api/admin"
+	"github.com/msalbrain/authSphere/client"
 )
 
 func setupMiddlewares(e *echo.Echo) {
@@ -23,20 +26,23 @@ func setupMiddlewares(e *echo.Echo) {
 }
 
 func apiRoutes(e *echo.Echo) {
-
+	admin.AdminRoute(e)
 }
 
 func webRoutes(e *echo.Echo) {
 
+	assetHandler := http.FileServer(http.FS(client.StaticFiles))
+	e.GET("/", echo.WrapHandler(assetHandler))
+	e.GET("/static/*", echo.WrapHandler(http.StripPrefix("/static/", assetHandler)))
+
+	// e.File("/web", "C:/Users/salman/Desktop/go-go/authSphere/client/dist/index.html")
 }
 
 
-func create() *echo.Echo {
+func Create() *echo.Echo {
 	// database.SetupDatabase()
 
 	e := echo.New()
-
-
 
 	setupMiddlewares(e)
 	apiRoutes(e)
@@ -45,11 +51,11 @@ func create() *echo.Echo {
 	return e
 }
 
-func listen(e *echo.Echo) error {
+func Listen(e *echo.Echo) error {
 	serverHost := os.Getenv("SERVER_HOST")
-	serverPort := os.Getenv("SERVER_PORT")
+	// serverPort := os.Getenv("SERVER_PORT")
 
-	return e.Start(fmt.Sprintf("%s:%s", serverHost, serverPort))
+	return e.Start(fmt.Sprintf("%s:%s", serverHost, "8080"))
 }
 
 
