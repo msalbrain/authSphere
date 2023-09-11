@@ -1,10 +1,7 @@
-# Authsphere 🔐
+﻿# Authsphere 🔐
 
-<div align="center" width="50px" height="50px">
+![authspere](./image/authsmall_logo.jpeg){width="10px "}
 
-![authspere](authsmall_logo.jpeg)
-
-</div>
 
 Authsphere is an open-source authentication and authorization service that provides a range of features similar to Auth0. It offers token authentication, email and password authentication, multi-factor authentication (MFA), JWT and refresh token management, role-based access control (RBAC), a dashboard for managing the authentication service, user and user session management, and provides SDKs and APIs for seamless integration.
 
@@ -49,7 +46,10 @@ Clone the repository: `git clone https://github.com/msalbrain/authsphere.git`
 - Copy .env.example to .env
 - Install the required dependencies: `npm install`
 - Configure the necessary environment variables.
-- Set up the database (SQLite or any preferred database).
+- Set up the database (SQLite or any preferred database). 
+```
+docker run --rm -v "C:\Users\salman\Desktop\go-go\authSphere:/src" -w /src kjconroy/sqlc generate
+```
 - go mod download
 - go run .
 - Go to localhost:8080

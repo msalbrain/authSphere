@@ -10,22 +10,35 @@ import (
 	"database/sql"
 )
 
-const createSAuthor = `-- name: CreateSAuthor :one
+const createUser = `-- name: CreateUser :one
 INSERT INTO users (
-  name, bio
+  name, email, hashed_password, bio, auth_token, created_at, updated_at
 ) VALUES (
-  ?, ?
+  ?, ?, ?, ?, ?, ?, ?
 )
-RETURNING id, name, email, hashed_password, bio, auth_token, created_at, updated_at
+RETURNING id, name, email, hashed_password, bio, refresh_token, auth_token, created_at, updated_at
 `
 
-type CreateSAuthorParams struct {
-	Name string
-	Bio  sql.NullString
+type CreateUserParams struct {
+	Name           string
+	Email          sql.NullString
+	HashedPassword sql.NullString
+	Bio            sql.NullString
+	AuthToken      string
+	CreatedAt      int64
+	UpdatedAt      sql.NullInt64
 }
 
-func (q *Queries) CreateSAuthor(ctx context.Context, arg CreateSAuthorParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createSAuthor, arg.Name, arg.Bio)
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, createUser,
+		arg.Name,
+		arg.Email,
+		arg.HashedPassword,
+		arg.Bio,
+		arg.AuthToken,
+		arg.CreatedAt,
+		arg.UpdatedAt,
+	)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -33,6 +46,7 @@ func (q *Queries) CreateSAuthor(ctx context.Context, arg CreateSAuthorParams) (U
 		&i.Email,
 		&i.HashedPassword,
 		&i.Bio,
+		&i.RefreshToken,
 		&i.AuthToken,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -40,23 +54,23 @@ func (q *Queries) CreateSAuthor(ctx context.Context, arg CreateSAuthorParams) (U
 	return i, err
 }
 
-const deleteSAuthor = `-- name: DeleteSAuthor :exec
+const deleteUser = `-- name: DeleteUser :exec
 DELETE FROM users
 WHERE id = ?
 `
 
-func (q *Queries) DeleteSAuthor(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteSAuthor, id)
+func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteUser, id)
 	return err
 }
 
-const getSAuthor = `-- name: GetSAuthor :one
-SELECT id, name, email, hashed_password, bio, auth_token, created_at, updated_at FROM users
+const getUser = `-- name: GetUser :one
+SELECT id, name, email, hashed_password, bio, refresh_token, auth_token, created_at, updated_at FROM users
 WHERE id = ?
 `
 
-func (q *Queries) GetSAuthor(ctx context.Context, id int64) (User, error) {
-	row := q.db.QueryRowContext(ctx, getSAuthor, id)
+func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUser, id)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -64,6 +78,7 @@ func (q *Queries) GetSAuthor(ctx context.Context, id int64) (User, error) {
 		&i.Email,
 		&i.HashedPassword,
 		&i.Bio,
+		&i.RefreshToken,
 		&i.AuthToken,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -71,62 +86,41 @@ func (q *Queries) GetSAuthor(ctx context.Context, id int64) (User, error) {
 	return i, err
 }
 
-const getSJoin = `-- name: GetSJoin :one
-SELECT
-  users.id AS user_id,
-  users.name,
-  users.email,
-  users.bio,
-  user_sessions.session_token,
-  user_sessions.login_time,
-  user_sessions.logout_time,
-  user_sessions.ip_address,
-  user_sessions.user_agent,
-  user_sessions.is_active
-FROM
-  users
-JOIN
-  user_sessions ON users.id = user_sessions.user_id
+const getUserByEmail = `-- name: GetUserByEmail :one
+SELECT id, name, email, hashed_password, bio, refresh_token, auth_token, created_at, updated_at FROM users
+WHERE email = ?
 `
 
-type GetSJoinRow struct {
-	UserID       int64
-	Name         string
-	Email        sql.NullString
-	Bio          sql.NullString
-	SessionToken string
-	LoginTime    int64
-	LogoutTime   sql.NullInt64
-	IpAddress    sql.NullString
-	UserAgent    sql.NullString
-	IsActive     bool
-}
-
-func (q *Queries) GetSJoin(ctx context.Context) (GetSJoinRow, error) {
-	row := q.db.QueryRowContext(ctx, getSJoin)
-	var i GetSJoinRow
+func (q *Queries) GetUserByEmail(ctx context.Context, email sql.NullString) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
+	var i User
 	err := row.Scan(
-		&i.UserID,
+		&i.ID,
 		&i.Name,
 		&i.Email,
+		&i.HashedPassword,
 		&i.Bio,
-		&i.SessionToken,
-		&i.LoginTime,
-		&i.LogoutTime,
-		&i.IpAddress,
-		&i.UserAgent,
-		&i.IsActive,
+		&i.RefreshToken,
+		&i.AuthToken,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
-const listSAuthors = `-- name: ListSAuthors :many
-SELECT id, name, email, hashed_password, bio, auth_token, created_at, updated_at FROM users
-ORDER BY name
+const listUsers = `-- name: ListUsers :many
+SELECT id, name, email, hashed_password, bio, refresh_token, auth_token, created_at, updated_at FROM users
+LIMIT ?
+OFFSET ?
 `
 
-func (q *Queries) ListSAuthors(ctx context.Context) ([]User, error) {
-	rows, err := q.db.QueryContext(ctx, listSAuthors)
+type ListUsersParams struct {
+	Limit  int64
+	Offset int64
+}
+
+func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error) {
+	rows, err := q.db.QueryContext(ctx, listUsers, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -140,6 +134,7 @@ func (q *Queries) ListSAuthors(ctx context.Context) ([]User, error) {
 			&i.Email,
 			&i.HashedPassword,
 			&i.Bio,
+			&i.RefreshToken,
 			&i.AuthToken,
 			&i.CreatedAt,
 			&i.UpdatedAt,

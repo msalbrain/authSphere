@@ -1,19 +1,12 @@
 version: "2"
 sql:
   - engine: "sqlite"
-    schema: "sqlite_schema.sql"
+    schema: "migrations/0001_init_db.up.sql"
     queries: "sqlite_query.sql"
     gen:
       go:
         package: "database"
-        out: "database"
+        out: "internals/database"
 
-  - engine: "postgresql"
-    schema: "postgres_schema.sql"
-    queries: "postgres_query.sql"
-    gen:
-      go:
-        package: "database"
-        out: "database"
 
 
