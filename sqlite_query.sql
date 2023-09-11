@@ -1,36 +1,25 @@
--- name: GetSAuthor :one
+-- name: GetUser :one
 SELECT * FROM users
 WHERE id = ?;
 
--- name: ListSAuthors :many
+-- name: GetUserByEmail :one
 SELECT * FROM users
-ORDER BY name;
+WHERE email = ?;
 
--- name: CreateSAuthor :one
+-- name: ListUsers :many
+SELECT * FROM users
+LIMIT ?
+OFFSET ?;
+
+-- name: CreateUser :one
 INSERT INTO users (
-  name, bio
+  name, email, hashed_password, bio, auth_token, created_at, updated_at
 ) VALUES (
-  ?, ?
+  ?, ?, ?, ?, ?, ?, ?
 )
 RETURNING *;
 
--- name: DeleteSAuthor :exec
+-- name: DeleteUser :exec
 DELETE FROM users
 WHERE id = ?;
 
--- name: GetSJoin :one
-SELECT
-  users.id AS user_id,
-  users.name,
-  users.email,
-  users.bio,
-  user_sessions.session_token,
-  user_sessions.login_time,
-  user_sessions.logout_time,
-  user_sessions.ip_address,
-  user_sessions.user_agent,
-  user_sessions.is_active
-FROM
-  users
-JOIN
-  user_sessions ON users.id = user_sessions.user_id;

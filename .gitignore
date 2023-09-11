@@ -21,3 +21,5 @@ vendor/
 tmp
 .env
 
+mail/utils.go
+

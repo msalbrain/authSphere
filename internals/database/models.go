@@ -8,12 +8,25 @@ import (
 	"database/sql"
 )
 
+type AppState struct {
+	ID        int64
+	Jwtoption sql.NullString
+}
+
+type Mail struct {
+	ID      int64
+	Subject sql.NullString
+	Body    sql.NullString
+	Updated sql.NullInt64
+}
+
 type User struct {
 	ID             int64
 	Name           string
 	Email          sql.NullString
 	HashedPassword sql.NullString
 	Bio            sql.NullString
+	RefreshToken   string
 	AuthToken      string
 	CreatedAt      int64
 	UpdatedAt      sql.NullInt64
@@ -22,10 +35,9 @@ type User struct {
 type UserSession struct {
 	ID           int64
 	SessionToken string
+	Expires      int64
 	LoginTime    int64
-	LogoutTime   sql.NullInt64
 	IpAddress    sql.NullString
 	UserAgent    sql.NullString
-	IsActive     bool
 	UserID       int64
 }
